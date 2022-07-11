@@ -1,0 +1,10 @@
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# from auth-server , configuring an authentication server
+# to ensure API secrets aren't piublic in GitHub
+config.json
