@@ -7,4 +7,5 @@ jspm_packages
 
 # from auth-server , configuring an authentication server
 # to ensure API secrets aren't piublic in GitHub
+#environment variables
 config.json
