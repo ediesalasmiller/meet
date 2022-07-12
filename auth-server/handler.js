@@ -1,5 +1,5 @@
 const { google } = require("googleapis");
-const OAuth2 = google.auth.OAuth2;
+// const OAuth2 = google.auth.OAuth2;
 const calendar = google.calendar("v3");
 /**
  * SCOPES allows you to set access levels; this is set to readonly for now because you don't have access rights to
@@ -23,6 +23,7 @@ const credentials = {
   redirect_uris: ["https://ediesalasmiller.github.io/meet/"],
   javascript_origins: ["https://ediesalasmiller.github.io", "http://localhost:3000"],
 };
+// why do i need to reclarify the below add
 const { client_secret, client_id, redirect_uris, calendar_id } = credentials;
 const oAuth2Client = new google.auth.OAuth2(
   client_id,
@@ -36,28 +37,111 @@ const oAuth2Client = new google.auth.OAuth2(
  * as a URL parameter.
  */
 
-module.exports.getAuthURL = async () => {
 
- /**
-   *
-   * Scopes array passed to the `scope` option. Any scopes passed must be enabled in the
-   * "OAuth consent screen" settings in your project on your Google Console. Also, any passed
-   *  scopes are the ones users will see when the consent screen is displayed to them.
-   *
-   */
+
+module.exports.getAuthURL = async () => {
+  //  * Scopes array passed to the `scope` option. Any scopes passed must be enabled in the
+  //  * "OAuth consent screen" settings in your project on your Google Console. Also, any passed
+  //  *  scopes are the ones users will see when the consent screen is displayed to them.
+ 
 
  const authUrl = oAuth2Client.generateAuthUrl({
-   access_type: "offline",
-   scope: SCOPES,
- });
+    access_type: "offline",
+    scope: SCOPES,
+  });
 
- return {
-   statusCode: 200,
-   header: {
-     "Access=Control-Allow-Origin": "*",
-   },
-   body: JSON.stringify({
-     authUrl: authUrl,
-   }),
- };
+  return {
+    statusCode: 200,
+    headers: { "Access-Control-Allow-Origin": "*" },
+    body: JSON.stringify({
+      authUrl: authUrl,
+    }),
+  };
+};
+
+
+
+module.exports.getAccessToken = async (event) =>
+{
+  // The values used to instantiate the OAuthClient are at the top of the file 
+  const oAuth2Client = new google.auth.OAuth2(
+    client_id,
+    client_secret,
+    redirect_uris[0]
+  );
+  // Decode authorization code extracted from the URL query
+  const code = decodeURIComponent(`${event.pathParamenters.code}`);
+  return new Promise((resolve, reject) => {
+    /**
+     *  Exchange authorization code for access token with a “callback” after the exchange,
+     *  The callback in this case is an arrow function with the results as parameters: “err” and “token.”
+     */
+    oAuth2Client.getToken(code, (err, token) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve (token);
+    })
+  })
+  .then ((token) => {
+    //respond w OAuth token
+    return {
+      statusCode: 200,
+      headers: {
+  'Access-Control-Allow-Origin': '*'
+},
+      body: JSON.stringify(token),
+    };
+  })
+  .catch ((err) => {
+    //handle error
+    console.error(err);
+    return {
+      statusCode: 500,
+      body: JSON.stringify(err),
+    };
+  });
+};
+
+
+module.exports.getCalendarEvents = async (event) =>
+{
+  // The values used to instantiate the OAuthClient are at the top of the file 
+  const oAuth2Client = new google.auth.OAuth2(
+    client_id,
+    client_secret,
+    redirect_uris[0]
+  );
+  // Decode authorization code extracted from the URL query
+  const access_token = decodeURIComponent(`${event.pathParamenters.access_token}`);
+  return new Promise((resolve, reject) => {
+    /**
+     *  Exchange authorization code for access token with a “callback” after the exchange,
+     *  The callback in this case is an arrow function with the results as parameters: “err” and “token.”
+     */
+    oAuth2Client.getToken(access_token, (err, response) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve (response);
+    })
+  })
+  .then ((results) => {
+    //respond w OAuth token
+    return {
+      statusCode: 200,
+      headers: {
+  'Access-Control-Allow-Origin': '*'
+},
+      body: JSON.stringify({ events: results.data.items }),
+    };
+  })
+  .catch ((err) => {
+    //handle error
+    console.error(err);
+    return {
+      statusCode: 500,
+      body: JSON.stringify(err),
+    };
+  });
 };
