@@ -30,7 +30,7 @@
         <!-- step 2  -->
         <h4><b>Step 2:</b> Get your code and exchange for an access token</h4>
         <p>
-            After you’re redirected back to your Meet app on GitHub, copy the code
+            After you are redirected back to your Meet app on GitHub, copy the code
             from the URI.
         </p>
         <br />
@@ -76,7 +76,7 @@
         const codeValue = document.getElementById("code");
         const getAccessToken = document.getElementById("getToken");
         const accessTokenElement = document.getElementById("accessToken");
-        const getToken = "https://owsyvqjtn2.execute-api.us-west-1.amazonaws.com/dev/api/token";
+        const getTokenURL = "https://owsyvqjtn2.execute-api.us-west-1.amazonaws.com/dev/api/token";
 
         getAccessToken.onclick = function () {
             let code = codeValue.value;
@@ -85,7 +85,7 @@
             if (decodeURIComponent(code) === code) {
                 code = encodeURIComponent(codeValue.value);
             }
-            const getTokenRequest = getToken + "/" + code;
+            const getTokenRequest = getTokenURL + "/" + code;
             fetch(getTokenRequest)
                 .then(function (response) {
                     return response.json();
@@ -99,11 +99,11 @@
         // step 3 
         const getEvents = document.getElementById("getEvents");
         const events = document.getElementById("events");
-        const getCalendarEvents = "https://owsyvqjtn2.execute-api.us-west-1.amazonaws.com/dev/api/get-events";
+        const getCalendarEventsURL = "https://owsyvqjtn2.execute-api.us-west-1.amazonaws.com/dev/api/get-events";
 
         getEvents.onclick = function () {
             const { access_token } = JSON.parse(accessTokenElement.innerText);
-            const eventRequest = getCalendarEvents + "/" + access_token;
+            const eventRequest = getCalendarEventsURL + "/" + access_token;
             fetch(eventRequest)
                 .then(function (response) {
                     return response.json();
