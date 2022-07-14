@@ -24,7 +24,6 @@ const oAuth2Client = new google.auth.OAuth2(
   client_id,
   client_secret,
   redirect_uris[0],
-  calendar_id
 );
 
 
@@ -54,8 +53,17 @@ module.exports.getAuthURL = async () => {
   // );
 
 module.exports.getAccessTokenURL = async (event) => {
+    // The values used to instantiate the OAuthClient are at the top of the file 
+  const oAuth2Client = new google.auth.OAuth2(
+    client_id,
+    client_secret,
+    redirect_uris[0]
+  );
+
   // Decode authorization code extracted from the URL query
   const code = decodeURIComponent(`${event.pathParamenters.code}`);
+
+
   return new Promise((resolve, reject) => {
  
     oAuth2Client.getToken(code, (err, token) => {
@@ -99,6 +107,8 @@ module.exports.getCalendarEventsURL = async (event) =>
   );
   // Decode authorization code extracted from the URL query
   const access_token = decodeURIComponent(`${event.pathParamenters.access_token}`);
+
+  
   return new Promise((resolve, reject) => {
     /**
      *  Exchange authorization code for access token with a “callback” after the exchange,
