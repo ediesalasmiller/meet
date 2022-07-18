@@ -5,7 +5,7 @@ provider:
   runtime: nodejs12.x
   region: us-west-1
   timeout: 30 # default is 6
-  env:
+  environment:
     CLIENT_ID: ${file(config.json):CLIENT_ID}
     CLIENT_SECRET: ${file(config.json):CLIENT_SECRET}
     PROJECT_ID: ${file(config.json):PROJECT_ID}

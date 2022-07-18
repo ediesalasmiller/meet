@@ -61,7 +61,7 @@ module.exports.getAccessToken = async (event) => {
   );
 
   // Decode authorization code extracted from the URL query
-  const code = decodeURIComponent(`${event.pathParamenters.code}`);
+  const code = decodeURIComponent(`${event.pathParameters.code}`);
 
 
   return new Promise((resolve, reject) => {
@@ -106,20 +106,28 @@ module.exports.getCalendarEvents = async (event) =>
     redirect_uris[0],
   );
   // Decode authorization code extracted from the URL query
-  const access_token = decodeURIComponent(`${event.pathParamenters.access_token}`);
+  const access_token = decodeURIComponent(`${event.pathParameters.access_token}`);
 
+  oAuth2Client.setCredentials({ access_token });
 
   return new Promise((resolve, reject) => {
-    /**
-     *  Exchange authorization code for access token with a “callback” after the exchange,
-     *  The callback in this case is an arrow function with the results as parameters: “err” and “token.”
-     */
-    oAuth2Client.getToken(access_token, (error, response) => {
-      if (error) {
-        return reject(error);
+    // This calendar method will get a list of events from the “fullstackwebdev” Google calendar using oAuth2Client for authentication. You then use a callback to get the error and response and use these values to resolve or reject the promise.
+   calendar.events.list(
+      {
+        calendarId: calendar_id,
+        auth: oAuth2Client,
+        timeMin: new Date().toISOString(),
+        singleEvents: true,
+        orderBy: "startTime",
+      },
+      (error, response) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(response);
+        }
       }
-      return resolve (response);
-    })
+    );
   })
   .then ((results) => {
     //respond w OAuth token
@@ -138,8 +146,7 @@ module.exports.getCalendarEvents = async (event) =>
     return {
       statusCode: 500,
       headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
+      'Access-Control-Allow-Origin': '*'
     },
       body: JSON.stringify(err),
     };
