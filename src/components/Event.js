@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { mockData } from "../mock-data";
+
 
 class Event extends Component {
     
@@ -7,13 +9,13 @@ class Event extends Component {
   };
 
     render() {
-        const { event } = this.props;
+        // const { events } = this.props;
         return ( 
         <div className="event">
-            <h4 className="title">{event.summary}</h4>
-            <h6 className="time">{event.originalStartTime}</h6>
-            <h6 className="location">{event.location}</h6>
-            <button className="showDetails" onClick={event.description}>Show Details</button>
+            <h4 className="title">{mockData.summary}</h4>
+            <h6 className="time">{mockData.originalStartTime}</h6>
+            <h6 className="location">{mockData.location}</h6>
+            <button className="showDetails" onClick={mockData.description}>Show Details</button>
           
         </div>
         );

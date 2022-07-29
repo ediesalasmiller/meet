@@ -27,42 +27,35 @@ describe('<App /> component', () => {
 
 //integration tests
 describe('<App /> integration', () => {
-    let AppWrapper;
-    beforeAll(() => {
-        AppWrapper = mount(<App />);
-    });
-    
-    test('app will pass "events STATE as a PROP to EventList', () => {
-        const AppEventsState = AppWrapper.state('events');
-        expect(AppEventsState).not.toEqual(undefined);
-        expect(AppWrapper.find(EventList).props.events).toEqual(AppEventsState);  
-        AppWrapper.unmount() 
-    });
-    test('app passes "location" state as prop to CitySearch', () => {
-        const AppLocationsState = AppWrapper.state('locations');
-        expect(AppLocationsState).not.toEqual(undefined);
-        expect(AppWrapper.find(CitySearch).props.locations).toEqual(AppLocationsState);
-        AppWrapper.unmount()
-    });
-    test('get list of events matching city selected by user', async () => {
-        const CitySearchWrapper = AppWrapper.find(CitySearch);
-        const locations= extractLocations(mockData);
-        //citysearch is getting set to have ALL available cities... locations is extracted from the events themselves
-        CitySearchWrapper.setState({ suggestions: locations });
-        const suggestions = CitySearchWrapper.state('suggestions');
-//selectedIndex will hold index of selected suggestion from suggestions arround... 
-//mathfloor still will eval to an integer value from - to suggestions.length -1
-        const selectedIndex = Math.floor(Match.random() * (suggestions.length));
-        //once the index is selected.. its used to return suggestions, which is stored in selectedCity var
-        const selectedCity = suggestions[selectedIndex];
-        //await is added to handleItemClicked bc its expected that it has async to fetch before filtering to suggestionsn.
-        await CitySearchWrapper.instance().handleItemClicked(selectedCity);
-        //This function is mainly expected to get all the events from the API asynchronously
-        const allEvents = await getEvents();
-        //now that all events is filtered against the selected city to find events in same location.... eventsToShow is born.
-        const eventsToShow = allEvents.filter(event => event.location === selectedCity);
-        expect(AppWrapper.state('events')).toEqual(eventsToShow);
-        AppWrapper.unmount();
+  test('App passes "events" state as a prop to EventList', () => {
+    const AppWrapper = mount(<App />);
+    const AppEventsState = AppWrapper.state('events');
+    expect(AppEventsState).not.toEqual(undefined);
+    expect(AppWrapper.find(EventList).props().events).toEqual(AppEventsState);
+    AppWrapper.unmount();
+  });
 
-    })
+   
+    test('App passes "locations" state as a prop to CitySearch', () => {
+  const AppWrapper = mount(<App />);
+  const AppLocationsState = AppWrapper.state('locations');
+  expect(AppLocationsState).not.toEqual(undefined);
+  expect(AppWrapper.find(CitySearch).props().locations).toEqual(AppLocationsState);
+  AppWrapper.unmount();
+});
+    
+    test('get list of events matching the city selected by the user', async () => {
+  const AppWrapper = mount(<App />);
+  const CitySearchWrapper = AppWrapper.find(CitySearch);
+  const locations = extractLocations(mockData);
+  CitySearchWrapper.setState({ suggestions: locations });
+  const suggestions = CitySearchWrapper.state('suggestions');
+  const selectedIndex = Math.floor(Math.random() * (suggestions.length));
+  const selectedCity = suggestions[selectedIndex];
+  await CitySearchWrapper.instance().handleItemClicked(selectedCity);
+  const allEvents = await getEvents();
+  const eventsToShow = allEvents.filter(event => event.location === selectedCity);
+  expect(AppWrapper.state('events')).toEqual(eventsToShow);
+  AppWrapper.unmount();
+});
 });

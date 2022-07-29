@@ -6,10 +6,11 @@ import { extractLocations } from '../api';
 
 describe('<CitySearch /> component', () => {
   let locations, CitySearchWrapper;
+  
   beforeAll(() => {
     locations = extractLocations(mockData);
     //PASSING LOCATIONS AS A PROP 
-    CitySearchWrapper = shallow(<CitySearch locations={locations} />);
+    CitySearchWrapper = shallow(<CitySearch locations={locations} updateEvents={() => {}} />);
   });
 
   //SHOW A LIST OF SUGGESTIONS DURING SEARCH
