@@ -12,9 +12,9 @@ describe('<Event /> component', () => {
     expect(EventWrapper.find('.event')).toHaveLength(1);
   });
   test('render title', () => {
-    expect(EventWrapper.find('.title')).toHaveLength(1);
+    expect(EventWrapper.find('.event-title')).toHaveLength(1);
   });
   test('render details', () => {
-    expect(EventWrapper.find('.showDetails')).toHaveLength(1);
+    expect(EventWrapper.find('.details-button')).toHaveLength(1);
   });
 });

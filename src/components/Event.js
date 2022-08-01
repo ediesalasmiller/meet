@@ -1,24 +1,29 @@
 import React, { Component } from "react";
-import { mockData } from "../mock-data";
-
 
 class Event extends Component {
-    
-    handleClick = () => {
-    console.log('this is:', this);
-  };
+    toggleDetails = () => {
+        this.setState({ show: !this.state.show });
+    }
+
+    constructor() {
+        super();
+        this.state = {
+            show: false
+        }
+    }
 
     render() {
-        // const { events } = this.props;
-        return ( 
-        <div className="event">
-            <h4 className="title">{mockData.summary}</h4>
-            <h6 className="time">{mockData.originalStartTime}</h6>
-            <h6 className="location">{mockData.location}</h6>
-            <button className="showDetails" onClick={mockData.description}>Show Details</button>
-          
-        </div>
+        const { event } = this.props;
+        const { show } = this.state;
+
+        return (
+            <div className="event">
+                <h1 className="event-title">{event.summary}</h1>
+                <div className="event-info">{event.start.dateTime} {event.start.timeZone} {event.location}</div>
+                {show && <div className="event-details">{event.description}</div>}
+                <button className="details-button" onClick={this.toggleDetails}>View details</button>
+            </div>
         );
     }
 }
-export default Event
+export default Event;

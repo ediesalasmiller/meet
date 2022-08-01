@@ -12,7 +12,9 @@ class NumberOfEvents extends Component {
     if(!isNaN(value) && value >= 1 && value <=32) {
       this.props({ numberOfEvents: value })
     }else { 
-      inputNumber: '32'
+      this.setState({
+        infoText: ""
+      })
     };
   }
 
