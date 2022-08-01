@@ -3,7 +3,7 @@ Meet app to find events in your city!
 
 endpoints:
 GET AUTHORIZATION URL: 
-    https://p7p7gmvde4.execute-api.us-west-1.amazonaws.com/dev/api/get-events
+    https://p7p7gmvde4.execute-api.us-west-1.amazonaws.com/dev/api/get-auth-url
 GET ACCESS TOKEN
     https://p7p7gmvde4.execute-api.us-west-1.amazonaws.com/dev/api/token/{code}
 

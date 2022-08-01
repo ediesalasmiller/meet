@@ -9,24 +9,10 @@ export const extractLocations = (events) => {
   return locations;
 };
 
-const removeQuery = () => {
-  if (window.history.pushState && window.location.pathname) {
-    var newurl =
-      window.location.protocol +
-      "//" +
-      window.location.host +
-      window.location.pathname;
-    window.history.pushState("", "", newurl);
-  } else {
-    newurl = window.location.protocol + "//" + window.location.host;
-    window.history.pushState("", "", newurl);
-  }
-};
-
 const getToken = async (code) => {
   const encodeCode = encodeURIComponent(code);
   const { access_token } = await fetch(
-     'https://p7p7gmvde4.execute-api.us-west-1.amazonaws.com/dev/api/token'+'/' + encodeCode
+     'https://p7p7gmvde4.execute-api.us-west-1.amazonaws.com/dev/api/token/' + encodeCode
   )
   .then((res) => {
     return res.json();
@@ -46,6 +32,20 @@ const checkToken = async (accessToken) => {
     .catch((error) => error.json());
 
   return result;
+};
+
+const removeQuery = () => {
+  if (window.history.pushState && window.location.pathname) {
+    var newurl =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname;
+    window.history.pushState("", "", newurl);
+  } else {
+    newurl = window.location.protocol + "//" + window.location.host;
+    window.history.pushState("", "", newurl);
+  }
 };
 
 export const getEvents = async () => {
@@ -82,7 +82,7 @@ export const getAccessToken = async () => {
     const code = await searchParams.get("code");
     if (!code) {
       const results = await axios.get(
-        "https://p7p7gmvde4.execute-api.us-west-1.amazonaws.com/dev/api/get-events"
+        "https://p7p7gmvde4.execute-api.us-west-1.amazonaws.com/dev/api/get-auth-url"
       );
       const { authUrl } = results.data;
       return (window.location.href = authUrl);
@@ -91,4 +91,3 @@ export const getAccessToken = async () => {
   }
   return accessToken;
 };
-
