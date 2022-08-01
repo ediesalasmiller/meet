@@ -20,7 +20,8 @@ handleInputChanged = (event) => {
 
 handleItemClicked = (suggestion) => {
   this.setState({
-    query: suggestion
+    query: suggestion,
+    showSuggestions: false
   });
   this.props.updateEvents(suggestion);
 }
@@ -34,7 +35,7 @@ handleItemClicked = (suggestion) => {
           onChange={this.handleInputChanged} 
           onFocus={() => { this.setState({ showSuggestions: true })}}
           />
-          <ul className="suggestions">
+          <ul className="suggestions" style={this.state.showSuggestions ? {}: { display: 'none' }}>
               {this.state.suggestions.map((suggestion) => (
                 <li key={suggestion} onClick={() => this.handleItemClicked(suggestion)}>{suggestion}</li>
               ))}
