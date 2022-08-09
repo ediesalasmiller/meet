@@ -29,3 +29,9 @@ Scenario 3: User can select a city from the suggested list
     Then their city should be changed to that city (i.e., “Berlin, Germany”)
     And the list of suggestions should disappear.
     And the user should receive a list of upcoming events in that city.
+
+
+   JEST dependency for tdd 
+   Jest-Cucumber for BDD acceptance testing
+   PUPPETEER FOR CHROMIUM END TO END TESTING
+   
