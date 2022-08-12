@@ -1,33 +1,38 @@
 import React, { Component } from 'react';
+import { ErrorAlert } from '../Alert';
 
 class NumberOfEvents extends Component {
   state = {
     numberOfEvents: 32,
-    inputNumber: ''
+    errorText: ''
   };
 
-   handleInputChanged = (event, numberOfEvents) => {
-    const { value } = event.value;
+  handleInputChanged = (event, numberOfEvents) => {
+    const inputValue  = event.target.value;
     // The isNaN() function determines whether a value is NaN Not
-    if(!isNaN(value) && value >= 1 && value <=32) {
-      this.props({ numberOfEvents: value })
+    if(!isNaN(inputValue) && inputValue >= 1 && inputValue <=32) {
+      this.setState({ 
+        numberOfEvents: inputValue,
+        errorText: " "
+      })
     }else { 
       this.setState({
-        infoText: ""
+        errorText: "please enter a number between 1 and 32"
       })
     };
   }
-
+  
   render() {
     return (
       <div className='NumberOfEvents'>
         <input
         type="number" 
-        className='events' 
+        className='numberEvents' 
         id='numberEvents' 
-        value={this.state.numberOfEvents} 
-        onChange={this.handleInputChange} 
+        placeholder='Number of Events'
+        onChange={this.handleInputChanged} 
         />
+        <ErrorAlert text={this.state.errorText} />
       </div>
     );
   }

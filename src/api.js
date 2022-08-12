@@ -60,7 +60,7 @@ export const getEvents = async () => {
 
   if (token) {
     removeQuery();
-    const url = 'https://p7p7gmvde4.execute-api.us-west-1.amazonaws.com/dev/api/get-events' + '/' + token;
+    const url = 'https://p7p7gmvde4.execute-api.us-west-1.amazonaws.com/dev/api/get-events/' + token;
     const result = await axios.get(url);
     if (result.data) {
       var locations = extractLocations(result.data.events);
