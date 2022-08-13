@@ -43,6 +43,7 @@ class CitySearch extends Component {
         <InfoAlert text={this.state.infoText} />
           <input type="text"
           className="city"
+          placeholder='i.e. Berlin, Germany'
           value={this.state.query} 
           onChange={this.handleInputChanged} 
           onFocus={() => { this.setState({ showSuggestions: true })}}
