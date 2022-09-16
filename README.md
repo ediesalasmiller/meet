@@ -1,4 +1,4 @@
-# Chat Room App
+# Events PWA App
 A app to find events near you.
 
 A serverless, progressive web application with React using a
